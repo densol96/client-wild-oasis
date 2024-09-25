@@ -28,6 +28,12 @@
       transform: rotate(1turn);
     }
   }
+
+  body:has(.make-header-sticky) header {
+    position: sticky;
+    top: 0;
+    background-color: inherit;
+  }
 }
 
 /* For data picker */
