@@ -49,12 +49,6 @@ export const getCabins = async function () {
     throw new Error("Cabins could not be loaded");
   }
 
-  await new Promise((res) => {
-    setTimeout(() => {
-      res();
-    }, 1500);
-  });
-
   return data;
 };
 
@@ -140,7 +134,11 @@ export async function getSettings() {
     console.error(error);
     throw new Error("Settings could not be loaded");
   }
-
+  await new Promise((res) => {
+    setTimeout(() => {
+      res();
+    }, 5500);
+  });
   return data;
 }
 

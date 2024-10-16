@@ -11,6 +11,8 @@ const josefin = Josefin_Sans({
 import "@/app/_styles/globals.css";
 import Header from "./_components/Header";
 
+import { ReservationProvider } from "@/app/_components/ReservationContext";
+
 export const metadata = {
   title: {
     template: "%s / The Wild Oasis",
@@ -30,9 +32,11 @@ export default function RootLayout({ children }) {
                         ${josefin.className} flex flex-col`}
       >
         <Header />
-        <main className="max-w-7xl w-full mx-auto flex-1 py-12 flex flex-col">
-          {children}
-        </main>
+        <ReservationProvider>
+          <main className="max-w-7xl w-full mx-auto flex-1 py-12 flex flex-col">
+            {children}
+          </main>
+        </ReservationProvider>
       </body>
     </html>
   );
