@@ -3,7 +3,6 @@ import { auth } from "../_lib/auth";
 
 export default async function Navigation() {
   const session = await auth();
-  console.log(session);
 
   return (
     <nav className="z-10 text-xl">
@@ -24,21 +23,20 @@ export default async function Navigation() {
             About
           </Link>
         </li>
-        <li>
-          {session?.user?.image ? (
+        <li className="flex gap-3 items-center">
+          {session?.user?.image && (
             <img
               className="h-8 rounded-full"
               src={session?.user?.image}
               referrerPolicy="no-referrer"
             />
-          ) : (
-            <Link
-              href="/account"
-              className="hover:text-accent-400 transition-colors"
-            >
-              Guest area
-            </Link>
-          )}
+          )}{" "}
+          <Link
+            href="/account"
+            className="hover:text-accent-400 transition-colors"
+          >
+            Guest area
+          </Link>
         </li>
       </ul>
     </nav>
