@@ -1,14 +1,42 @@
 "use client";
 import { differenceInDays } from "date-fns";
 import { useReservation } from "./ReservationContext";
+import { createBookingAction } from "../_lib/actions";
+import SubmitButton from "./SubmitButton";
+import { useRouter } from "next/navigation";
 
 function ReservationForm({ cabin, user }) {
   // CHANGE
-  const { range } = useReservation();
-  const { maxCapacity, regularPrice, discount } = cabin;
+  const { range, resetRange } = useReservation();
+  const { maxCapacity, regularPrice, discount, id } = cabin;
 
-  const numNights = differenceInDays(range.to, range.from);
+  const endDate = range.to;
+  const startDate = range.from;
+  const numNights = differenceInDays(endDate, startDate);
   const cabinPrice = numNights * (regularPrice - discount);
+
+  const router = useRouter();
+
+  const data = {
+    startDate,
+    endDate,
+    numNights,
+    cabinPrice,
+    cabinId: id,
+  };
+
+  async function onSubmit(formData) {
+    const bookingData = {
+      ...data,
+      numGuests: formData.get("numGuests"),
+      observations: formData.get("observations"),
+    };
+    const response = await createBookingAction(bookingData);
+    resetRange();
+    router.push("/cabins/thankyou");
+  }
+
+  const btnDisabled = !startDate || !endDate;
 
   return (
     <div className="scale-[1.01]">
@@ -27,9 +55,10 @@ function ReservationForm({ cabin, user }) {
         </div>
       </div>
 
-      <p></p>
-
-      <form className="bg-primary-900 py-10 px-16 text-lg flex gap-5 flex-col">
+      <form
+        action={onSubmit}
+        className="bg-primary-900 py-10 px-16 text-lg flex gap-5 flex-col"
+      >
         <div className="space-y-2">
           <label htmlFor="numGuests">How many guests?</label>
           <select
@@ -64,9 +93,7 @@ function ReservationForm({ cabin, user }) {
         <div className="flex justify-end items-center gap-6">
           <p className="text-primary-300 text-base">Start by selecting dates</p>
 
-          <button className="bg-accent-500 px-8 py-4 text-primary-800 font-semibold hover:bg-accent-600 transition-all disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-gray-300">
-            Reserve now
-          </button>
+          <SubmitButton pendingLabel="Reserving..">Reserve now</SubmitButton>
         </div>
       </form>
     </div>
