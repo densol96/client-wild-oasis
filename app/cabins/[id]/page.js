@@ -27,15 +27,6 @@ export const revalidate = 3600;
 export default async function Page({ params }) {
   // LONG
   const cabin = await getCabin(params.id);
-  // const settings = await getSettings();
-  // const bookedDates = await getBookedDatesByCabinId(params.id);
-
-  // BETTER but even better to split between components and then stream them as they are ready
-  // const [cabin, settings, bookedDates] = await Promise.all([
-  //   getCabin(params.id),
-  //   getSettings(),
-  //   getBookedDatesByCabinId(params.id),
-  // ]);
 
   return (
     <div className="max-w-6xl mx-auto mt-8">
